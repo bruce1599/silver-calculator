@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SITARAM SILVER Calculator</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e0e5ec">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #e0e5ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 90%;
+      max-width: 500px;
+      padding: 20px;
+      background: #e0e5ec;
+      border-radius: 20px;
+      box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+      margin: 10px 0;
+    }
+    p, label {
+      font-size: 14px;
+      color: #333;
+    }
+    select, input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 12px;
+      background: #e0e5ec;
+      box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+      font-size: 16px;
+      color: #333;
+      -webkit-appearance: none;
+    }
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #e0e5ec;
+      color: #333;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      box-shadow: inset 5px 5px 15px #bebebe, inset -5px -5px 15px #ffffff;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e0e5ec;
+      border-radius: 12px;
+      box-shadow: inset 5px 5px 15px #bebebe, inset -5px -5px 15px #ffffff;
+      font-size: 16px;
+      color: #333;
+      word-wrap: break-word;
+    }
+    .hidden {
+      display: none;
+    }
+    .print-only {
+      display: none;
+    }
+    @media print {
+      .no-print {
+        display: none;
+      }
+      .print-only {
+        display: block;
+      }
+      .container {
+        box-shadow: none;
+        width: 100%;
+        max-width: none;
+      }
+    }
+    .terms {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e0e5ec;
+      border-radius: 12px;
+      box-shadow: inset 5px 5px 15px #bebebe, inset -5px -5px 15px #ffffff;
+      font-size: 14px;
+      color: #555;
+    }
+    .terms h3 {
+      margin: 0 0 10px;
+    }
+    .terms ol {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SITARAM SILVER</h1>
+    <p>Plot No. 25/26, Sant Kabir Housing Society 2, Opp. Zapa Pedak Road, Rajkot-360003</p>
+    <p>Mobile No.: 9426968016</p>
+
+    <h2>Silver Calculator</h2>
+
+    <label for="calculationMode">Calculate:</label>
+    <select id="calculationMode" onchange="toggleInputs()">
+      <option value="total">Total Amount from Quantity</option>
+      <option value="quantity">Quantity from Total Amount</option>
+    </select>
+
+    <div id="quantityInput">
+      <label for="quantity">Quantity (kg):</label>
+      <input type="number" id="quantity" placeholder="Enter quantity in kilograms" min="0" step="0.001" inputmode="decimal">
+    </div>
+
+    <div id="totalAmountInput" class="hidden">
+      <label for="totalAmount">Total Amount (Rs):</label>
+      <input type="number" id="totalAmount" placeholder="Enter total amount" min="0" inputmode="decimal">
+    </div>
+
+    <label for="rate">Rate per kilogram (Rs):</label>
+    <input type="number" id="rate" value="45524.00" min="0" inputmode="decimal">
+
+    <label for="centralTax">Central Tax (%):</label>
+    <input type="number" id="centralTax" value="1.5" min="0" inputmode="decimal">
+
+    <label for="stateTax">State/UT Tax (%):</label>
+    <input type="number" id="stateTax" value="1.5" min="0" inputmode="decimal">
+
+    <div>
+      <input type="checkbox" id="roundQuantity">
+      <label for="roundQuantity">Round Quantity to Whole Number</label>
+    </div>
+
+    <div class="action-buttons no-print">
+      <button onclick="calculate()">Calculate</button>
+      <button onclick="resetForm()">Reset</button>
+      <button onclick="printResult()" id="printButton" class="hidden">Print</button>
+      <button onclick="saveValues()" id="saveButton">Save Values</button>
+    </div>
+
+    <div class="result hidden" id="result"></div>
+
+    <div class="terms">
+      <h3>Terms & Conditions</h3>
+      <ol>
+        <li>Goods once sold will not be taken back.</li>
+        <li>Interest @18% p.a. will be charged if payment is not made within due date.</li>
+        <li>Our risk and responsibility ceases as soon as the goods leave our premises.</li>
+        <li>"E.&.O.E."</li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful');
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+
+    // Load saved values on startup
+    window.addEventListener('load', loadSavedValues);
+
+    function toggleInputs() {
+      const mode = document.getElementById('calculationMode').value;
+      document.getElementById('quantityInput').style.display = (mode === 'total') ? 'block' : 'none';
+      document.getElementById('totalAmountInput').style.display = (mode === 'quantity') ? 'block' : 'none';
+      document.getElementById('result').classList.add('hidden');
+    }
+
+    function loadSavedValues() {
+      const savedValues = JSON.parse(localStorage.getItem('silverCalcValues') || '{}');
+      if (savedValues.rate) document.getElementById('rate').value = savedValues.rate;
+      if (savedValues.centralTax) document.getElementById('centralTax').value = savedValues.centralTax;
+      if (savedValues.stateTax) document.getElementById('stateTax').value = savedValues.stateTax;
+      if (savedValues.roundQuantity) document.getElementById('roundQuantity').checked = savedValues.roundQuantity;
+    }
+
+    function saveValues() {
+      const values = {
+        rate: document.getElementById('rate').value,
+        centralTax: document.getElementById('centralTax').value,
+        stateTax: document.getElementById('stateTax').value,
+        roundQuantity: document.getElementById('roundQuantity').checked
+      };
+      localStorage.setItem('silverCalcValues', JSON.stringify(values));
+      alert('Values saved successfully!');
+    }
+
+    function resetForm() {
+      document.getElementById('quantity').value = '';
+      document.getElementById('totalAmount').value = '';
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('printButton').classList.add('hidden');
+    }
+
+    function printResult() {
+      window.print();
+    }
+
+    function calculate() {
+      const mode = document.getElementById('calculationMode').value;
+      const ratePerKg = parseFloat(document.getElementById('rate').value);
+      const centralTax = parseFloat(document.getElementById('centralTax').value);
+      const stateTax = parseFloat(document.getElementById('stateTax').value);
+      const totalGST = (centralTax + stateTax) / 100;
+      const formatter = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const quantityFormatter = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+      const resultDiv = document.getElementById('result');
+      const roundQuantity = document.getElementById('roundQuantity').checked;
+
+      if (isNaN(ratePerKg) || ratePerKg < 0 || isNaN(centralTax) || centralTax < 0 || isNaN(stateTax) || stateTax < 0) {
+        alert("Please enter valid positive numbers for rate and taxes.");
+        return;
+      }
+
+      if (mode === 'total') {
+        const quantity = parseFloat(document.getElementById('quantity').value);
+        if (isNaN(quantity) || quantity <= 0) {
+          alert("Please enter a valid quantity.");
+          return;
+        }
+        
+        const baseAmount = quantity * ratePerKg;
+        const centralTaxAmount = baseAmount * (centralTax / 100);
+        const stateTaxAmount = baseAmount * (stateTax / 100);
+        const totalAmount = baseAmount + centralTaxAmount + stateTaxAmount;
+
+        resultDiv.innerHTML = `
+          <strong>Breakdown:</strong><br>
+          Base Amount: Rs ${formatter.format(baseAmount)}<br>
+          Central Tax (1.5%): Rs ${formatter.format(centralTaxAmount)}<br>
+          State/UT Tax (1.5%): Rs ${formatter.format(stateTaxAmount)}<br>
+          <strong>Total Amount: Rs ${formatter.format(totalAmount)}</strong><br>
+          (Rate per kg incl. GST: Rs ${formatter.format(ratePerKg * (1 + totalGST))})
+        `;
+      } else {
+        const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+        if (isNaN(totalAmount) || totalAmount <= 0) {
+          alert("Please enter a valid total amount.");
+          return;
+        }
+        
+        const rateIncludingGST = ratePerKg * (1 + totalGST);
+        let quantity = totalAmount / rateIncludingGST;
+        if (roundQuantity) {
+          quantity = Math.round(quantity);
+        }
+
+        const baseAmount = totalAmount / (1 + totalGST);
+        const centralTaxAmount = baseAmount * (centralTax / 100);
+        const stateTaxAmount = baseAmount * (stateTax / 100);
+
+        resultDiv.innerHTML = `
+          <strong>Breakdown:</strong><br>
+          Quantity: ${quantityFormatter.format(quantity)} kg<br>
+          Base Amount: Rs ${formatter.format(baseAmount)}<br>
+          Central Tax (1.5%): Rs ${formatter.format(centralTaxAmount)}<br>
+          State/UT Tax (1.5%): Rs ${formatter.format(stateTaxAmount)}<br>
+          <strong>Total Amount: Rs ${formatter.format(totalAmount)}</strong><br>
+          (Rate per kg incl. GST: Rs ${formatter.format(rateIncludingGST)})
+        `;
+      }
+
+      resultDiv.classList.remove('hidden');
+      document.getElementById('printButton').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
