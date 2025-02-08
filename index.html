@@ -22,6 +22,101 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     }
 
+    /* Creative Loading Screen Styles */
+    .loader-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--background);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      transition: opacity 0.3s ease-out;
+    }
+
+    .loader {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+    }
+
+    .loader-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 4px solid transparent;
+      border-top-color: var(--button-orange);
+      animation: spin 0.5s linear infinite;
+    }
+
+    .loader-ring:nth-child(2) {
+      width: 80%;
+      height: 80%;
+      top: 10%;
+      left: 10%;
+      border-top-color: var(--text-primary);
+      animation-duration: 0.7s;
+      animation-direction: reverse;
+    }
+
+    .loader-ring:nth-child(3) {
+      width: 60%;
+      height: 60%;
+      top: 20%;
+      left: 20%;
+      border-top-color: var(--button-orange);
+      animation-duration: 0.9s;
+    }
+
+    .loader-text {
+      color: var(--button-orange);
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      animation: glow 0.5s ease-in-out infinite alternate;
+      text-shadow: 0 0 10px var(--button-orange);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px var(--button-orange),
+                     0 0 10px var(--button-orange),
+                     0 0 15px var(--button-orange);
+      }
+      to {
+        text-shadow: 0 0 10px var(--button-orange),
+                     0 0 20px var(--button-orange),
+                     0 0 30px var(--button-orange);
+      }
+    }
+
+    .fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Hide main content initially */
+    .container {
+      opacity: 0;
+      transition: opacity 0.3s ease-in;
+    }
+
+    .container.show {
+      opacity: 1;
+    }
+
     body {
       background: var(--background);
       color: var(--text-primary);
@@ -172,7 +267,17 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Creative Loading Screen -->
+  <div class="loader-container" id="loader">
+    <div class="loader">
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+    </div>
+    <div class="loader-text">Sitaram Silver</div>
+  </div>
+
+  <div class="container" id="mainContent">
     <header class="calculator-header">
       <h1>SITARAM SILVER</h1>
       <div class="business-info">
@@ -235,6 +340,14 @@
   </div>
 
   <script>
+    // Loading screen handler - reduced to 500ms (0.5 seconds)
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.getElementById('loader').classList.add('fade-out');
+        document.getElementById('mainContent').classList.add('show');
+      }, 500); // Show loader for 0.5 seconds only
+    });
+
     function toggleMode() {
       const isQuantityMode = document.getElementById('calculationMode').value === 'quantity';
       document.getElementById('quantityInput').classList.toggle('hidden', isQuantityMode);
