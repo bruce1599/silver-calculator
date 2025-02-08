@@ -4,397 +4,265 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SITARAM SILVER Calculator</title>
+  <meta name="theme-color" content="#000000">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1a1a1a">
-  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
+    :root {
+      --background: #000000;
+      --button-dark: #333333;
+      --button-light: #a5a5a5;
+      --button-orange: #ff9f0a;
+      --text-primary: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #121212;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background: var(--background);
+      color: var(--text-primary);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      color: #b3b3b3;
     }
+
     .container {
-      width: 90%;
+      width: 100%;
       max-width: 500px;
       padding: 20px;
-      background: #1e1e1e;
-      border-radius: 20px;
-      box-shadow: 20px 20px 60px #0a0a0a, 
-                 -20px -20px 60px #2a2a2a,
-                 inset 0 0 20px rgba(255, 51, 51, 0.1);
     }
-    h1, h2, h3 {
+
+    .calculator-header {
       text-align: center;
-      color: #ff3333;
-      margin: 10px 0;
-      text-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+      margin-bottom: 1rem;
     }
-    p, label {
-      font-size: 14px;
-      color: #b3b3b3;
-      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+
+    .calculator-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--button-orange);
     }
-    select, input[type="number"], input[type="text"] {
-      width: calc(100% - 30px);
-      padding: 15px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 12px;
-      background: #1e1e1e;
-      box-shadow: inset 5px 5px 10px #151515, 
-                 inset -5px -5px 10px #272727,
-                 0 0 5px rgba(255, 51, 51, 0.1);
-      font-size: 16px;
-      color: #cccccc;
-      -webkit-appearance: none;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
+
+    .business-info {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--button-light);
+      margin-bottom: 1.5rem;
     }
-    select:focus, input[type="number"]:focus, input[type="text"]:focus {
-      box-shadow: inset 5px 5px 10px #151515, 
-                 inset -5px -5px 10px #272727,
-                 0 0 10px rgba(255, 51, 51, 0.2);
-      outline: none;
+
+    .input-group {
+      margin: 1rem 0;
     }
-    select {
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff3333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 15px;
-      padding-right: 45px;
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--button-light);
+      font-size: 0.9rem;
     }
-    div:has(> input[type="checkbox"]) {
-      margin: 15px 0;
-      color: #b3b3b3;
-    }
-    input[type="checkbox"] {
-      margin-right: 8px;
-      accent-color: #ff3333;
-      width: 18px;
-      height: 18px;
-    }
-    .action-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    button {
+
+    select, input {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(145deg, #1e1e1e, #232323);
-      color: #ff3333;
+      padding: 1rem;
+      background: var(--button-dark);
       border: none;
-      border-radius: 12px;
-      box-shadow: 5px 5px 15px #151515, 
-                 -5px -5px 15px #272727;
-      font-size: 18px;
+      border-radius: 1rem;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      text-align: right;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 2rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-shadow: 0 0 5px rgba(255, 51, 51, 0.3);
+      transition: filter 0.2s;
     }
+
+    button.primary {
+      background: var(--button-orange);
+      color: var(--text-primary);
+    }
+
+    button.secondary {
+      background: var(--button-light);
+      color: var(--background);
+    }
+
     button:hover {
-      background: linear-gradient(145deg, #232323, #1e1e1e);
-      color: #ff6666;
-      box-shadow: inset 5px 5px 15px #151515, 
-                 inset -5px -5px 15px #272727,
-                 0 0 10px rgba(255, 51, 51, 0.2);
+      filter: brightness(1.1);
     }
+
     .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #1e1e1e;
-      border-radius: 12px;
-      border: none;
-      box-shadow: inset 5px 5px 15px #151515, 
-                 inset -5px -5px 15px #272727;
-      font-size: 16px;
-      color: #b3b3b3;
-      word-wrap: break-word;
+      padding: 1.5rem;
+      background: var(--button-dark);
+      border-radius: 1rem;
+      margin: 2rem 0;
+      font-size: 1rem;
+      text-align: left;
     }
+
     .result strong {
-      color: #ff4444;
-      text-shadow: 0 0 5px rgba(255, 51, 51, 0.3);
+      font-size: 1.2rem;
+      color: var(--button-orange);
     }
+
     .terms {
-      margin-top: 20px;
-      padding: 15px;
-      background: #1e1e1e;
-      border-radius: 12px;
-      border: none;
-      box-shadow: inset 5px 5px 15px #151515, 
-                 inset -5px -5px 15px #272727;
-      font-size: 14px;
-      color: #999999;
+      color: var(--button-light);
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 1.5rem;
     }
-    .terms h3 {
-      margin-bottom: 10px;
-    }
-    .terms ol {
-      padding-left: 20px;
-      line-height: 1.5;
-    }
-    @media print {
-      @page {
-        margin: 0;
-        size: auto;
-      }
-      body {
-        background-color: #121212 !important;
-        color: #b3b3b3 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        padding: 20px !important;
-      }
-      .container {
-        background: #1e1e1e !important;
-        border-radius: 20px !important;
-        box-shadow: 20px 20px 60px #0a0a0a, 
-                   -20px -20px 60px #2a2a2a,
-                   inset 0 0 20px rgba(255, 51, 51, 0.1) !important;
-        padding: 20px !important;
-        margin: 20px !important;
-      }
-      h1, h2, h3 {
-        color: #ff3333 !important;
-        text-shadow: 0 0 10px rgba(255, 51, 51, 0.3) !important;
-      }
-      p, label {
-        color: #b3b3b3 !important;
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5) !important;
-      }
-      select, input[type="number"], input[type="text"] {
-        background: #1e1e1e !important;
-        color: #cccccc !important;
-        box-shadow: inset 5px 5px 10px #151515, 
-                   inset -5px -5px 10px #272727,
-                   0 0 5px rgba(255, 51, 51, 0.1) !important;
-      }
-      .result {
-        background: #1e1e1e !important;
-        color: #b3b3b3 !important;
-        box-shadow: inset 5px 5px 15px #151515, 
-                   inset -5px -5px 15px #272727 !important;
-      }
-      .result strong {
-        color: #ff4444 !important;
-        text-shadow: 0 0 5px rgba(255, 51, 51, 0.3) !important;
-      }
-      .terms {
-        background: #1e1e1e !important;
-        color: #999999 !important;
-        box-shadow: inset 5px 5px 15px #151515, 
-                   inset -5px -5px 15px #272727 !important;
-      }
-      /* Hide unnecessary elements when printing */
-      .no-print,
-      input[type="checkbox"], 
-      .action-buttons,
-      #calculationMode {
-        display: none !important;
-      }
-      /* Show only the active input */
-      #quantityInput.hidden,
-      #totalAmountInput.hidden {
-        display: none !important;
-      }
-      #quantityInput:not(.hidden),
-      #totalAmountInput:not(.hidden) {
-        display: block !important;
-      }
-    }
+
     .hidden {
       display: none;
     }
-    .print-only {
-      display: none;
+
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .no-print, button {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>SITARAM SILVER</h1>
-    <p>Plot No. 25/26, Sant Kabir Housing Society 2, Opp. Zapa Pedak Road, Rajkot-360003</p>
-    <p>Mobile No.: 9426968016</p>
+    <header class="calculator-header">
+      <h1>SITARAM SILVER</h1>
+      <div class="business-info">
+        <p>Plot No. 25/26, Sant Kabir Housing Society 2, Opp. Zapa Pedak Road, Rajkot-360003</p>
+        <p>Mobile No.: 9426968016</p>
+      </div>
+    </header>
 
-    <h2>Silver Calculator</h2>
+    <main>
+      <div class="input-group">
+        <select id="calculationMode" class="primary" onchange="toggleMode()">
+          <option value="total">Quantity to Amount</option>
+          <option value="quantity">Amount to Quantity</option>
+        </select>
+      </div>
 
-    <label for="calculationMode">Calculate:</label>
-    <select id="calculationMode" onchange="toggleInputs()">
-      <option value="total">Total Amount from Quantity</option>
-      <option value="quantity">Quantity from Total Amount</option>
-    </select>
+      <div class="input-group" id="quantityInput">
+        <label>QUANTITY (KG)</label>
+        <input type="number" id="quantity" min="0" step="0.001" placeholder="0.000">
+      </div>
 
-    <div id="quantityInput">
-      <label for="quantity">Quantity (kg):</label>
-      <input type="number" id="quantity" placeholder="Enter quantity in kilograms" min="0" step="0.001" inputmode="decimal">
-    </div>
+      <div class="input-group hidden" id="totalAmountInput">
+        <label>TOTAL AMOUNT (₹)</label>
+        <input type="number" id="totalAmount" min="0" placeholder="0.00">
+      </div>
 
-    <div id="totalAmountInput" class="hidden">
-      <label for="totalAmount">Total Amount (Rs):</label>
-      <input type="number" id="totalAmount" placeholder="Enter total amount" min="0" inputmode="decimal">
-    </div>
+      <div class="input-group">
+        <label>RATE PER KG (₹)</label>
+        <input type="number" id="rate" value="45524.00">
+      </div>
 
-    <label for="rate">Rate per kilogram (Rs):</label>
-    <input type="number" id="rate" value="45524.00" min="0" inputmode="decimal">
+      <div class="input-group">
+        <label>CENTRAL TAX (%)</label>
+        <input type="number" id="centralTax" value="1.5">
+      </div>
 
-    <label for="centralTax">Central Tax (%):</label>
-    <input type="number" id="centralTax" value="1.5" min="0" inputmode="decimal">
+      <div class="input-group">
+        <label>STATE TAX (%)</label>
+        <input type="number" id="stateTax" value="1.5">
+      </div>
 
-    <label for="stateTax">State/UT Tax (%):</label>
-    <input type="number" id="stateTax" value="1.5" min="0" inputmode="decimal">
+      <div class="button-group no-print">
+        <button class="secondary" onclick="handleReset()">Reset</button>
+        <button class="primary" onclick="handleCalculate()">Calculate</button>
+      </div>
 
-    <div>
-      <input type="checkbox" id="roundQuantity">
-      <label for="roundQuantity">Round Quantity to Whole Number</label>
-    </div>
+      <div class="result hidden" id="result">
+        <h3 id="resultTitle"></h3>
+        <div id="resultBreakdown"></div>
+      </div>
 
-    <div class="action-buttons no-print">
-      <button onclick="calculate()">Calculate</button>
-      <button onclick="resetForm()">Reset</button>
-      <button onclick="printResult()" id="printButton" class="hidden">Print</button>
-      <button onclick="saveValues()" id="saveButton">Save Values</button>
-    </div>
-
-    <div class="result hidden" id="result"></div>
-
-    <div class="terms">
-      <h3>Terms & Conditions</h3>
-      <ol>
-        <li>Goods once sold will not be taken back.</li>
-        <li>Interest @18% p.a. will be charged if payment is not made within due date.</li>
-        <li>Our risk and responsibility ceases as soon as the goods leave our premises.</li>
-        <li>"E.&.O.E."</li>
-      </ol>
-    </div>
+      <div class="terms">
+        <h3>Terms & Conditions</h3>
+        <p>Goods once sold will not be taken back.</p>
+        <p>Interest @18% p.a. will be charged if payment is not made within due date.</p>
+        <p>Our risk and responsibility ceases as soon as the goods leave our premises.</p>
+        <p>"E.&.O.E."</p>
+      </div>
+    </main>
   </div>
 
   <script>
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(registration => {
-            console.log('ServiceWorker registration successful');
-          })
-          .catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-      });
-    }
-
-    // Load saved values on startup
-    window.addEventListener('load', loadSavedValues);
-
-    function toggleInputs() {
-      const mode = document.getElementById('calculationMode').value;
-      document.getElementById('quantityInput').style.display = (mode === 'total') ? 'block' : 'none';
-      document.getElementById('totalAmountInput').style.display = (mode === 'quantity') ? 'block' : 'none';
+    function toggleMode() {
+      const isQuantityMode = document.getElementById('calculationMode').value === 'quantity';
+      document.getElementById('quantityInput').classList.toggle('hidden', isQuantityMode);
+      document.getElementById('totalAmountInput').classList.toggle('hidden', !isQuantityMode);
       document.getElementById('result').classList.add('hidden');
     }
 
-    function loadSavedValues() {
-      const savedValues = JSON.parse(localStorage.getItem('silverCalcValues') || '{}');
-      if (savedValues.rate) document.getElementById('rate').value = savedValues.rate;
-      if (savedValues.centralTax) document.getElementById('centralTax').value = savedValues.centralTax;
-      if (savedValues.stateTax) document.getElementById('stateTax').value = savedValues.stateTax;
-      if (savedValues.roundQuantity) document.getElementById('roundQuantity').checked = savedValues.roundQuantity;
-    }
-
-    function saveValues() {
-      const values = {
-        rate: document.getElementById('rate').value,
-        centralTax: document.getElementById('centralTax').value,
-        stateTax: document.getElementById('stateTax').value,
-        roundQuantity: document.getElementById('roundQuantity').checked
-      };
-      localStorage.setItem('silverCalcValues', JSON.stringify(values));
-      alert('Values saved successfully!');
-    }
-
-    function resetForm() {
-      document.getElementById('quantity').value = '';
-      document.getElementById('totalAmount').value = '';
-      document.getElementById('result').classList.add('hidden');
-      document.getElementById('printButton').classList.add('hidden');
-    }
-
-    function printResult() {
-      window.print();
-    }
-
-    function calculate() {
+    function handleCalculate() {
       const mode = document.getElementById('calculationMode').value;
-      const ratePerKg = parseFloat(document.getElementById('rate').value);
-      const centralTax = parseFloat(document.getElementById('centralTax').value);
-      const stateTax = parseFloat(document.getElementById('stateTax').value);
-      const totalGST = (centralTax + stateTax) / 100;
-      const formatter = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      const quantityFormatter = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
-      const resultDiv = document.getElementById('result');
-      const roundQuantity = document.getElementById('roundQuantity').checked;
+      const rate = parseFloat(document.getElementById('rate').value);
+      const centralTaxRate = parseFloat(document.getElementById('centralTax').value) / 100;
+      const stateTaxRate = parseFloat(document.getElementById('stateTax').value) / 100;
+      const totalTaxRate = centralTaxRate + stateTaxRate;
+      const rateWithGST = rate * (1 + totalTaxRate);
+      let resultHTML = "";
 
-      if (isNaN(ratePerKg) || ratePerKg < 0 || isNaN(centralTax) || centralTax < 0 || isNaN(stateTax) || stateTax < 0) {
-        alert("Please enter valid positive numbers for rate and taxes.");
-        return;
-      }
-
-      if (mode === 'total') {
+      if (mode === "total") {
         const quantity = parseFloat(document.getElementById('quantity').value);
-        if (isNaN(quantity) || quantity <= 0) {
-          alert("Please enter a valid quantity.");
-          return;
-        }
-        
-        const baseAmount = quantity * ratePerKg;
-        const centralTaxAmount = baseAmount * (centralTax / 100);
-        const stateTaxAmount = baseAmount * (stateTax / 100);
-        const totalAmount = baseAmount + centralTaxAmount + stateTaxAmount;
+        const baseAmount = quantity * rate;
+        const centralTax = baseAmount * centralTaxRate;
+        const stateTax = baseAmount * stateTaxRate;	
+        const totalAmount = baseAmount + centralTax + stateTax;
 
-        resultDiv.innerHTML = `
-          <strong>Breakdown:</strong><br>
-          Base Amount: Rs ${formatter.format(baseAmount)}<br>
-          Central Tax (1.5%): Rs ${formatter.format(centralTaxAmount)}<br>
-          State/UT Tax (1.5%): Rs ${formatter.format(stateTaxAmount)}<br>
-          <strong>Total Amount: Rs ${formatter.format(totalAmount)}</strong><br>
-          (Rate per kg incl. GST: Rs ${formatter.format(ratePerKg * (1 + totalGST))})
-        `;
+        resultHTML = `Breakdown:<br>
+          Base Amount: ₹${baseAmount.toFixed(2)}<br>
+          Central Tax: ₹${centralTax.toFixed(2)}<br>
+          State Tax: ₹${stateTax.toFixed(2)}<br>
+          Total Amount: ₹${totalAmount.toFixed(2)}<br>
+          (Rate per kg incl. GST: ₹${rateWithGST.toFixed(2)})`;
       } else {
         const totalAmount = parseFloat(document.getElementById('totalAmount').value);
-        if (isNaN(totalAmount) || totalAmount <= 0) {
-          alert("Please enter a valid total amount.");
-          return;
-        }
-        
-        const rateIncludingGST = ratePerKg * (1 + totalGST);
-        let quantity = totalAmount / rateIncludingGST;
-        if (roundQuantity) {
-          quantity = Math.round(quantity);
-        }
+        const baseAmount = totalAmount / (1 + totalTaxRate);
+        const quantity = baseAmount / rate;
+        const centralTax = baseAmount * centralTaxRate;
+        const stateTax = baseAmount * stateTaxRate;
 
-        const baseAmount = totalAmount / (1 + totalGST);
-        const centralTaxAmount = baseAmount * (centralTax / 100);
-        const stateTaxAmount = baseAmount * (stateTax / 100);
-
-        resultDiv.innerHTML = `
-          <strong>Breakdown:</strong><br>
-          Quantity: ${quantityFormatter.format(quantity)} kg<br>
-          Base Amount: Rs ${formatter.format(baseAmount)}<br>
-          Central Tax (1.5%): Rs ${formatter.format(centralTaxAmount)}<br>
-          State/UT Tax (1.5%): Rs ${formatter.format(stateTaxAmount)}<br>
-          <strong>Total Amount: Rs ${formatter.format(totalAmount)}</strong><br>
-          (Rate per kg incl. GST: Rs ${formatter.format(rateIncludingGST)})
-        `;
+        resultHTML = `Breakdown:<br>
+          Quantity: ${quantity.toFixed(3)} KG<br>
+          Base Amount: ₹${baseAmount.toFixed(2)}<br>
+          Central Tax: ₹${centralTax.toFixed(2)}<br>
+          State Tax: ₹${stateTax.toFixed(2)}<br>
+          Total Amount: ₹${totalAmount.toFixed(2)}<br>
+          (Rate per kg incl. GST: ₹${rateWithGST.toFixed(2)})`;
       }
 
-      resultDiv.classList.remove('hidden');
-      document.getElementById('printButton').classList.remove('hidden');
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('resultBreakdown').innerHTML = resultHTML;
+    }
+
+    function handleReset() {
+      document.getElementById('quantity').value = '';
+      document.getElementById('totalAmount').value = '';
+      document.getElementById('rate').value = '45524.00';
+      document.getElementById('centralTax').value = '1.5';
+      document.getElementById('stateTax').value = '1.5';
+      document.getElementById('result').classList.add('hidden');
     }
   </script>
 </body>
