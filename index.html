@@ -75,6 +75,34 @@
       color: var(--text-primary);
       font-size: 1.2rem;
       text-align: right;
+      transition: all 0.2s ease-in-out;
+      outline: 2px solid transparent;
+      box-shadow: 0 0 0 0 var(--button-orange);
+    }
+
+    select:focus, input:focus {
+      outline: 2px solid var(--button-orange);
+      box-shadow: 0 0 10px 0 rgba(255, 159, 10, 0.3);
+      background: var(--button-dark);
+      transform: scale(1.01);
+    }
+
+    select:active, input:active {
+      transform: scale(0.99);
+    }
+
+    select:hover, input:hover {
+      background: #404040;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
     }
 
     .button-group {
