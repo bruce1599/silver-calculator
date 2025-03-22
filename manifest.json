@@ -1,12 +1,21 @@
 {
   "name": "SITARAM SILVER Calculator",
-  "short_name": "Silver Calc",
-  "description": "Calculate silver prices with GST",
-  "start_url": "./",
+  "short_name": "SilverCalc",
+  "description": "Professional silver price calculator with GST and tax breakdown functionality",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#e0e5ec",
-  "theme_color": "#e0e5ec",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ff9500",
+  "categories": ["finance", "business", "tools"],
   "icons": [
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "icons/icon-192x192.png",
       "sizes": "192x192",
@@ -18,6 +27,44 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/light-mode.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "label": "Light Mode Interface"
+    },
+    {
+      "src": "screenshots/dark-mode.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "label": "Dark Mode Interface"
+    }
+  ],
+  "related_apps": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "New Calculation",
+      "short_name": "Calculate",
+      "description": "Start a new silver calculation",
+      "url": "/?mode=quantity",
+      "icons": [{ "src": "icons/shortcut-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Rate History",
+      "short_name": "History",
+      "description": "View historical silver rates",
+      "url": "/history",
+      "icons": [{ "src": "icons/history-icon.png", "sizes": "96x96" }]
     }
   ]
 }
